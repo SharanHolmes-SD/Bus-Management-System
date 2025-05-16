@@ -1,0 +1,156 @@
+import React from 'react';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 30,
+    backgroundColor: '#ffffff'
+  },
+  header: {
+    marginBottom: 20,
+    textAlign: 'center'
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 10,
+    color: '#1a56db'
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#6b7280'
+  },
+  section: {
+    marginBottom: 20
+  },
+  sectionTitle: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: '#1a56db',
+    borderBottom: '1px solid #e5e7eb',
+    paddingBottom: 5
+  },
+  row: {
+    flexDirection: 'row',
+    marginBottom: 8
+  },
+  label: {
+    width: '40%',
+    fontSize: 12,
+    color: '#6b7280'
+  },
+  value: {
+    width: '60%',
+    fontSize: 12,
+    color: '#111827'
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 30,
+    left: 30,
+    right: 30,
+    textAlign: 'center',
+    fontSize: 10,
+    color: '#6b7280'
+  }
+});
+
+const BusReport = ({ busData }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Bus Details Report</Text>
+        <Text style={styles.subtitle}>Generated on {new Date().toLocaleDateString()}</Text>
+      </View>
+
+      {/* Basic Bus Information */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Basic Bus Information</Text>
+        <View style={styles.row}>
+          <Text style={styles.label}>Bus Number:</Text>
+          <Text style={styles.value}>{busData.busNo || 'N/A'}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Bus Name:</Text>
+          <Text style={styles.value}>{busData.busName || 'N/A'}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Bus Type:</Text>
+          <Text style={styles.value}>{busData.busType || 'N/A'}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Total Seats:</Text>
+          <Text style={styles.value}>{busData.noOfSeats || 'N/A'}</Text>
+        </View>
+      </View>
+
+      {/* Driver Information */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Driver Information</Text>
+        <View style={styles.row}>
+          <Text style={styles.label}>Driver Name:</Text>
+          <Text style={styles.value}>{busData.driverName || 'N/A'}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Owner Name:</Text>
+          <Text style={styles.value}>{busData.busOwnerName || 'N/A'}</Text>
+        </View>
+      </View>
+
+      {/* Route Information */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Route Information</Text>
+        <View style={styles.row}>
+          <Text style={styles.label}>Route Number:</Text>
+          <Text style={styles.value}>{busData.routeNo || 'N/A'}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>From Location:</Text>
+          <Text style={styles.value}>{busData.startLocation || 'N/A'}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>To Location:</Text>
+          <Text style={styles.value}>{busData.endLocation || 'N/A'}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Price:</Text>
+          <Text style={styles.value}>{busData.price ? `LKR ${busData.price}` : 'N/A'}</Text>
+        </View>
+      </View>
+
+      {/* Schedule Information */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Schedule Information</Text>
+        {busData.schedule && busData.schedule.length > 0 ? (
+          busData.schedule.map((schedule, index) => (
+            <View key={index} style={{ marginBottom: 10 }}>
+              <View style={styles.row}>
+                <Text style={styles.label}>Date:</Text>
+                <Text style={styles.value}>{schedule.date || 'N/A'}</Text>
+              </View>
+              {schedule.times && schedule.times.map((time, timeIndex) => (
+                <View key={timeIndex} style={{ marginLeft: 20 }}>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Departure Time:</Text>
+                    <Text style={styles.value}>{time.startTime || 'N/A'}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Arrival Time:</Text>
+                    <Text style={styles.value}>{time.endTime || 'N/A'}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          ))
+        ) : (
+          <Text style={styles.value}>No schedule information available</Text>
+        )}
+      </View>
+
+      <Text style={styles.footer}>
+        This is an official document generated by the Bus Management System
+      </Text>
+    </Page>
+  </Document>
+);
+
+export default BusReport; 
